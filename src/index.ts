@@ -136,4 +136,5 @@ const tsCompilerPlugin = (settings?: {
     }
 }
 
-export default tsCompilerPlugin;
+module.exports = tsCompilerPlugin;
+module.exports.default = tsCompilerPlugin;

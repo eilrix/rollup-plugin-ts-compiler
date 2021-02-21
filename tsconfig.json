@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "CommonJS",
         "target": "ES2019",
         "baseUrl": ".",
         "strict": true,

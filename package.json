@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-ts-compiler",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Rollup plugin for seamless integration between Rollup and Typescript.",
   "main": "build/index.js",
   "types": "build",

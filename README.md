@@ -87,3 +87,5 @@ You can use shared state even for different inputs since when Typescript Compile
 ### Other
 
 Plugin supports declarations and source maps.
+
+Plugin should be placed as first entry in plugins array of Rollup options. [More abot it](https://github.com/eilrix/rollup-plugin-ts-compiler/blob/master/src/index.ts#L12-L19)

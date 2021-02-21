@@ -1,8 +1,12 @@
 # rollup-plugin-ts-compiler
 
-Rollup plugin for typescript with compiler errors and incremental build.
+Rollup plugin for integration between Rollup and Typescript with compiler errors and incremental build support.  
+It supports declarations and source maps.  
 
-It uses [modern Typescript Compiler API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#writing-an-incremental-program-watcher) with incremental program by default which makes it way more faster than rollup-plugin-typescript2 or @rollup/plugin-typescript
+Plugin uses [modern Typescript Compiler API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#writing-an-incremental-program-watcher) with incremental program by default which makes it way much faster than rollup-plugin-typescript2 or @rollup/plugin-typescript.  
+It was implemented via fully delegating compiling to Typescript Compiler which reads files directly from file system and then gives output to Rollup. Therefore Rollup's preceding pipeline is ignored.
+That is usually acceptable since you need only one plugin to compile .ts files and you can't have other plugins
+working with typescript code. Just make sure that in your plugin array inside Rollup options this plugin placed before babel or similar.  
 
 ## Installation 
 npm install rollup-plugin-ts-compiler
@@ -85,7 +89,3 @@ You can use shared state even for different inputs since when Typescript Compile
 
 
 ### Other
-
-Plugin supports declarations and source maps.
-
-Plugin should be placed as first entry in plugins array of Rollup options. [More abot it](https://github.com/eilrix/rollup-plugin-ts-compiler/blob/master/src/index.ts#L12-L19)

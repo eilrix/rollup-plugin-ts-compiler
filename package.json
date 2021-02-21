@@ -1,9 +1,12 @@
 {
   "name": "rollup-plugin-ts-compiler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Rollup plugin for seamless integration between Rollup and Typescript.",
   "main": "build/index.js",
   "types": "build",
+  "files": [
+    "/build"
+  ],
   "scripts": {
     "test": "npx --no-install jest",
     "build": "npx tsc",

@@ -49,31 +49,26 @@ const tsCompilerPlugin = (settings?: {
             // File already resolved
             if (isAbsolute(source)) return { id: source };
 
-            // If all failed, resolve manually
-            source = normalizePath(source);
-            const globFileName = source.split('/').pop();
-            const regexp = new RegExp(globFileName + '\\.(m?jsx?|tsx?)$');
-            const fileDir = normalizePath(dirname(resolve(dirname(importer), source)));
-            const fileName = fs.readdirSync(fileDir).find(fileName => {
-                return regexp.test(fileName);
-            });
-
-            if (!fileName) return null;
-
-            return { id: normalizePath(join(fileDir, fileName)) };
+            return null;
         },
         options(options) {
             if (!state.rollupOptions) state.rollupOptions = options;
 
-            options.plugins?.forEach((plugin, index) => {
-                const message = colors.brightYellow(disclaimerWarning);
-                if (index === 0 && plugin.name !== pluginName) {
-                    console.log(message);
+            let index = 0;
+            if (options.plugins)
+                for (let plugin of options.plugins) {
+                    const message = colors.brightYellow(disclaimerWarning);
+                    if (index === 0 && plugin.name !== pluginName) {
+                        console.log(message);
+                        break;
+                    }
+                    if (index > 0 && plugin.name === pluginName) {
+                        console.log(message);
+                        break;
+                    }
+                    index++;
                 }
-                if (index > 0 && plugin.name === pluginName) {
-                    console.log(message);
-                }
-            })
+
             return options;
         },
         buildStart(options) {

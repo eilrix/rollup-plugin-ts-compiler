@@ -48,6 +48,10 @@ export const startCompiler = (state: State, compilerOptionsOverwrite?: Object) =
         options.sourceMap = true;
     }
 
+    // Force some options
+    options.noEmit = false;
+
+
     state.compilerOptions = options;
     state.rootFileNames = fileNames;
 

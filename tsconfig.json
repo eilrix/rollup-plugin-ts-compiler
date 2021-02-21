@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES2019",
+        "baseUrl": ".",
+        "strict": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false,
+        "noImplicitAny": false,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "outDir": "./build",
+        "declaration": true,
+        "declarationDir": "./build",
+        "importHelpers": true,
+        "types": [
+            "jest",
+            "node",
+        ],
+        "paths": {
+            "@App/*": [
+                "src/*"
+            ],
+        },
+    },
+    "exclude": [
+        "node_modules",
+        "build"
+    ],
+    "include": [
+        "src/**/*.ts",
+    ],
+}

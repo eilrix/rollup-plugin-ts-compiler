@@ -1,24 +1,14 @@
 import colorsdef from 'colors/safe';
-import fs from 'fs-extra';
 import normalizePath from 'normalize-path';
-import { dirname, isAbsolute, join, resolve } from 'path';
+import { isAbsolute } from 'path';
 import { OutputBundle, OutputOptions, Plugin } from 'rollup';
 import ts from 'typescript';
 
+import { isExternalForm, pluginName, warnDisclaimer } from './helpers';
+import { emitFileToCache, rebuild, startCompiler } from './ts-api';
 import { State } from './types';
-import { startCompiler, emitFileToCache, rebuild } from './ts-api';
-import { isExternalForm } from './helpers';
-const colors: any = colorsdef;
 
-const pluginName = 'rollup-plugin-ts-compiler';
-// Appears if condition below wasn't met.
-const disclaimerWarning = `(!) Warning: ${pluginName} : Implementation of this plugin only works when it placed 
-as first item in plugin array of Rollup options. It can be okay for non-typescript files
-but if other plugins will try to modify .(ts|tsx|js|jsx) files before this plugin, their modifications won't
-be applied. This plugin reads files directly from file system, ignoring Rollup's preceding pipeline.
-That is usually acceptable since you need only one plugin to compile .ts files and you can't have other plugins
-working with typescript code.
-`;
+const colors: any = colorsdef;
 
 const tsCompilerPlugin = (settings?: {
     compilerOptions?: ts.CompilerOptions;
@@ -57,13 +47,12 @@ const tsCompilerPlugin = (settings?: {
             let index = 0;
             if (options.plugins)
                 for (let plugin of options.plugins) {
-                    const message = colors.brightYellow(disclaimerWarning);
                     if (index === 0 && plugin.name !== pluginName) {
-                        console.log(message);
+                        warnDisclaimer();
                         break;
                     }
                     if (index > 0 && plugin.name === pluginName) {
-                        console.log(message);
+                        warnDisclaimer();
                         break;
                     }
                     index++;
@@ -125,7 +114,7 @@ const tsCompilerPlugin = (settings?: {
             if (state.hasCompileError) {
                 // Well, we throw it here since sometimes it breaks "watch" mode of Rollup if we throw it in transform function
                 // @rollup/plugin-typescript has this problem with muiltiple inputs, very annoying
-                this.error('found Typescript errors, see log above')
+                this.error('found Typescript errors, see log above');
             }
         }
     }

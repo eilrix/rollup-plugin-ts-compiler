@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-ts-compiler",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Rollup plugin for integration between Rollup and Typescript.",
   "main": "build/index.js",
   "types": "build",
@@ -22,7 +22,7 @@
     "compiler"
   ],
   "author": "eilrix",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/eilrix/rollup-plugin-ts-compiler/issues"
   },

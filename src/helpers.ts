@@ -1,5 +1,7 @@
-import { isAbsolute } from 'path';
+import { isAbsolute, resolve } from 'path';
 import colorsdef from 'colors/safe';
+import normalizePathLib from 'normalize-path';
+
 const colors: any = colorsdef;
 
 export const pluginName = 'rollup-plugin-ts-compiler';
@@ -22,3 +24,5 @@ export const warnDisclaimer = () => {
 }
 
 export const isExternalForm = id => !id.startsWith('\0') && !id.startsWith('.') && !id.startsWith('/') && !isAbsolute(id) && !id.startsWith('$$');
+
+export const normalizePath = (fileName: string) => normalizePathLib(!isAbsolute(fileName) ? resolve(process.cwd(), fileName) : fileName);

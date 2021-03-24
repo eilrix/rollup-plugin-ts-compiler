@@ -1,10 +1,11 @@
+import colorsdef from 'colors/safe';
 import fs from 'fs-extra';
-import normalizePath from 'normalize-path';
 import { isAbsolute, resolve } from 'path';
 import ts from 'typescript';
-import colorsdef from 'colors/safe';
 
+import { normalizePath } from './helpers';
 import { State } from './types';
+
 const colors: any = colorsdef;
 
 
@@ -53,7 +54,7 @@ export const startCompiler = (state: State, compilerOptionsOverwrite?: Object) =
 
 
     state.compilerOptions = options;
-    state.rootFileNames = fileNames;
+    state.rootFileNames = fileNames.map(fileName => normalizePath(fileName));
 
     state.host = ts.createIncrementalCompilerHost(state.compilerOptions);
     const originalGetSourceFile = state.host.getSourceFile as Function;
@@ -62,9 +63,19 @@ export const startCompiler = (state: State, compilerOptionsOverwrite?: Object) =
     // each time it requested
     state.host = Object.assign(state.host, {
         getSourceFile(fileName: string, languageVersion: ts.ScriptTarget) {
-            const normalizedFileName = normalizePath(!isAbsolute(fileName) ? resolve(process.cwd(), fileName) : fileName);
+            const normalizedFileName = normalizePath(fileName);
             const cached = state.hostFiles.get(normalizedFileName);
-            if (cached) return cached;
+
+            if (state.pluginSettings?.monorepo) {
+                // In monorepo we want to cache only node_modules and root source files. Other files
+                // can belong to other local packages and we want to check them for changes
+                if (cached) {
+                    if (/node_modules/.test(normalizedFileName)) return cached;
+                    if (state.rootFileNames.includes(normalizedFileName)) return cached;
+                }
+            } else {
+                if (cached) return cached;
+            }
 
             const newFile = originalGetSourceFile(...arguments);
             state.hostFiles.set(normalizedFileName, newFile);
@@ -161,7 +172,7 @@ export const emitFileToCache = (state: State, callback?: () => void) => (fileNam
     }
 
     if (sourceFileName) {
-        const normalizedFileName = normalizePath(!isAbsolute(sourceFileName) ? resolve(process.cwd(), sourceFileName) : sourceFileName);
+        const normalizedFileName = normalizePath(sourceFileName);
         state.builtFiles.set(normalizedFileName, data);
     }
 

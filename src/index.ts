@@ -6,16 +6,14 @@ import ts from 'typescript';
 
 import { isExternalForm, pluginName, warnDisclaimer } from './helpers';
 import { emitFileToCache, rebuild, startCompiler } from './ts-api';
-import { State } from './types';
+import { State, PluginSettings } from './types';
 
 const colors: any = colorsdef;
 
-const tsCompilerPlugin = (settings?: {
-    compilerOptions?: ts.CompilerOptions;
-    sharedState?: Object;
-}): Plugin => {
+const tsCompilerPlugin = (settings?: PluginSettings): Plugin => {
 
     const state: State = settings?.sharedState as State ?? {};
+    state.pluginSettings = settings;
     state.hostFiles = new Map<string, ts.SourceFile>();
     state.builtFiles = new Map<string, string>();
     state.errorMessages = [];

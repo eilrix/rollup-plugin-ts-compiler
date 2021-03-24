@@ -40,6 +40,10 @@ Overrides compilerOptions values from tsconfig.json.
  })
 ```
 
+#### - monorepo
+Boolean. Set to true if you are working in monorepo. By default plugin caches and never recompiles node_modules and all files outside of your project root.
+But in monorepo we want to check and recompile files outside since they can be other local packages. Reduces compilation speed.
+
 #### - sharedState
 See below.
 

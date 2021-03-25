@@ -26,3 +26,4 @@ export const warnDisclaimer = () => {
 export const isExternalForm = id => !id.startsWith('\0') && !id.startsWith('.') && !id.startsWith('/') && !isAbsolute(id) && !id.startsWith('$$');
 
 export const normalizePath = (fileName: string) => normalizePathLib(!isAbsolute(fileName) ? resolve(process.cwd(), fileName) : fileName);
+

@@ -1,6 +1,6 @@
 # rollup-plugin-ts-compiler
 
-Fast Typescript compiler plugin for Rollup. Just try it in watch mode.  
+Fast and efficient Typescript compiler plugin for Rollup.
 All included: compiler errors, incremental build, declarations, source maps, monorepo support and more.  
 
 ## Installation

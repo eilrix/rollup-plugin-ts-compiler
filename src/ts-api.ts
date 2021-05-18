@@ -180,8 +180,9 @@ export const emitFileToCache = (state: State, callback?: () => void) => (fileNam
 }
 
 export const rebuild = (state: State) => {
-    if (!state.hasChanes) return
+    if (!state.hasChanes) return;
     state.hasChanes = false;
+    state.rootFileNames = state.rootFileNames.filter(name => fs.pathExistsSync(name));
 
     const newProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram(state.rootFileNames,
         state.compilerOptions, state.host, state.program as ts.EmitAndSemanticDiagnosticsBuilderProgram);

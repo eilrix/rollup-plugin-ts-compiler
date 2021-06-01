@@ -12,6 +12,7 @@ const colors: any = colorsdef;
 export const startCompiler = (state: State, compilerOptionsOverwrite?: Object) => {
     if (state.hasStarted) return;
     state.hasStarted = true;
+    state.compilerOptionsOverwrite = compilerOptionsOverwrite;
 
     const configPath = ts.findConfigFile(
         process.cwd(),
@@ -25,6 +26,7 @@ export const startCompiler = (state: State, compilerOptionsOverwrite?: Object) =
     }
     const mergedCompilerOptions = Object.assign({}, tsConfig?.compilerOptions, compilerOptionsOverwrite);
     tsConfig.compilerOptions = mergedCompilerOptions;
+    state.tsConfig = tsConfig;
 
     const { options, fileNames } = ts.parseJsonConfigFileContent(
         tsConfig,
@@ -182,7 +184,13 @@ export const emitFileToCache = (state: State, callback?: () => void) => (fileNam
 export const rebuild = (state: State) => {
     if (!state.hasChanes) return;
     state.hasChanes = false;
-    state.rootFileNames = state.rootFileNames.filter(name => fs.pathExistsSync(name));
+
+    const { fileNames } = ts.parseJsonConfigFileContent(
+        state.tsConfig,
+        ts.sys,
+        process.cwd(),
+    );
+    state.rootFileNames = fileNames;
 
     const newProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram(state.rootFileNames,
         state.compilerOptions, state.host, state.program as ts.EmitAndSemanticDiagnosticsBuilderProgram);

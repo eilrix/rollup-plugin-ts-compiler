@@ -22,4 +22,6 @@ export type State = {
     errorMessages: string[];
     hasCompileError: boolean;
     rollupOptions?: RollupOptions;
+    compilerOptionsOverwrite?: Object;
+    tsConfig?: any;
 }

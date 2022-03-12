@@ -1,6 +1,6 @@
 import { isAbsolute, resolve } from 'path';
 import colorsdef from 'colors/safe';
-import normalizePathLib from 'normalize-path';
+import normalizePath from 'normalize-path';
 
 const colors: any = colorsdef;
 
@@ -23,7 +23,8 @@ export const warnDisclaimer = () => {
     }
 }
 
-export const isExternalForm = id => !id.startsWith('\0') && !id.startsWith('.') && !id.startsWith('/') && !isAbsolute(id) && !id.startsWith('$$');
+export const isExternalForm = id => !id.startsWith('\0') && !id.startsWith('.') && !id.startsWith('/') && !isAbsolute(id) && !id.startsWith('$$')
+    || normalizePath(id).includes('/node_modules/') || normalizePath(id).startsWith('node_modules/');
 
-export const normalizePath = (fileName: string) => normalizePathLib(!isAbsolute(fileName) ? resolve(process.cwd(), fileName) : fileName);
+export const normalizePath = (fileName: string) => normalizePath(!isAbsolute(fileName) ? resolve(process.cwd(), fileName) : fileName);
 
